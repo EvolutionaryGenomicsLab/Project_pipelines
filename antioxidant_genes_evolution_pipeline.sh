@@ -5,7 +5,7 @@ mkdir -p project_directory/{src,data,results,sandbox}
 mkdir data/raw_seqs/
 
 ##Get CDS sequences from NCBI
-###The script for this stage is in the get_sequences repository
+###The script for this stage is in the get_ncbi_data repository
 bash get_CDS_sequence_from_genes.sh genes_list.txt species_list.txt > data/raw_seqs/ #Not all genes are going to be found. Sometimes the acronym used by NCBI is different from the one you are using (like using cap letters) or the sequence is not annotated for the species. 
 
 ##Extracting the primary transcripts from NCBI files. Primary transcripts are the longest isoform and therefore used as the representative of the whole gene.
@@ -54,7 +54,7 @@ mkdir -p results/PAML/{CAT,GPX3,GSR,PRDX1,PRDX3,SOD1,XDH}
 for file in $(cat gene_list.txt); do cp result/alignments/input_PAML_ ${file}_codon_alignment.phy results/PAML/${file}; done
 #Run PAML
 nohup codeml control_file.ctl &
-#Script extract PAML infos from output (lnL, np, omegas and positively selected sites). Script in the repository extract_data
+#Script extract PAML infos from output (lnL, np, omegas and positively selected sites). Script in the repository script_antioxidant
 bash extract_info_PAML.sh
 #cont sites found by BEB
 for file in $(cat lista_genes.txt); do echo "${file}/${file}_modelA" && cat ${file}/${file}_modelA | grep -A50 "(BEB)" | g
@@ -103,5 +103,5 @@ chmod +x godon
 ~/softwares/./godon test BS --m0-tree --ncat-codon-rate 4 codon_alignment.fasta tree.tre --procs 5 --json gene_result_GODON.json
 # Use "#" to mark the trees  
 #Extract the results
-#In the results directory, run the script get_godon_results.py in the same directory. The script is in the repository extract_data
+#In the results directory, run the script get_godon_results.py in the same directory. The script is in the repository script_antioxidants
 python get_godon_results.py > results_godon
